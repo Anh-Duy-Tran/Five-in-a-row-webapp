@@ -6,10 +6,12 @@ import App from './App';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const tileSize = 40;
-const scale = 1.5;
+const scale = 1.1;
 const boardsize = {
   x : Math.floor((window.innerWidth * scale) / tileSize),
-  y : Math.floor((window.innerHeight * scale) / tileSize) - 1
+  y : Math.floor((window.innerHeight * scale) / tileSize)
 }
+
+document.body.classList.add("no-scroll")
 
 root.render(<App boardsize={boardsize} />);
