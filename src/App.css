@@ -1,0 +1,19 @@
+.vsc-initialized {
+  margin: 0;
+}
+
+.Board {
+  display: flex;
+}
+
+.Row {
+  display: absolute;
+}
+
+.Tile {
+  width: 40px;
+  height: 40px;
+  border-style: solid;
+  background-color: grey;
+  border-width: 1px;
+}
