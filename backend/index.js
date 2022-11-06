@@ -6,6 +6,11 @@ const Logic = require('./logic/five-in-row');
 
 let board = []
 
+let win = {
+  x : null,
+  o : null
+}
+
 for (let i = 0; i < 50; i++) {
   let row = []
   for (let j = 0; j < 50; j++) {
@@ -35,7 +40,7 @@ app.get('/api/board', (req, res) => {
   Tiles
     .find({})
     .then(tiles => {
-      res.json(tiles)
+      res.json({tiles : tiles, win : win})
     })
     .catch(console.log);
 })
@@ -54,7 +59,11 @@ app.post('/api/board', (req, res) => {
   const newTile = new Tiles({...tile})
 
   newTile.save().then(saved => {
-    const win = Logic.addToBoard(board, saved.x, saved.y, saved.sign)
+    if (saved.sign) {
+      win.x = Logic.addToBoard(board, saved.x, saved.y, saved.sign)
+    } else {
+      win.o = Logic.addToBoard(board, saved.x, saved.y, saved.sign)
+    }
     res.json({saved, win : win})
   })
 })
@@ -64,6 +73,10 @@ app.delete('/api/board', (req, res) => {
     .deleteMany({})
     .then(ret => {
       Logic.resetBoard(board);
+      win = {
+        x : null,
+        o : null
+      }
       res.json(ret);
     })
     .catch(console.log)
