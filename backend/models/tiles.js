@@ -1,7 +1,7 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
 
-const url = 'mongodb+srv://duyduy12321:Duyduymongo@cluster0.lznt26g.mongodb.net/five-in-a-row?retryWrites=true&w=majority';
+const url = process.env.MONGODB_URL;
 
 const database = mongoose.connect(url)
   .then(() => {
@@ -18,7 +18,6 @@ const tilesSchema = new mongoose.Schema({
   },
   author : {
     type : String,
-    minLength: 5,
     required: true
   },
   x : {

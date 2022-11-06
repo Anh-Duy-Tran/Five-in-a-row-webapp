@@ -3,12 +3,13 @@
 }
 
 .no-scroll {
-  height: 100%;
   overflow: hidden;
 }
 
-.Container {
-  display: absolute;
+.Containter {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .Board {
@@ -22,7 +23,9 @@
 .Tile {
   width: 40px;
   height: 40px;
-  border-style: solid;
+  line-height: 40px;
+  border: 1px solid;
   background-color: white;
-  border-width: 1px;
+  text-align: center;
+  vertical-align: middle;
 }

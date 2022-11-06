@@ -1,11 +1,22 @@
-const Tile = ( {x, y} ) => {
+const Tile = ( {x, y, boardsize, boardState, onClick} ) => {
+  
+  x -= boardsize.middlePoint.x
+  y -= boardsize.middlePoint.y
 
-  const tileOnClick = (e) => {
-    console.log(x, y);
+  let sign = ''
+  const isChecked = boardState.find(tile => tile.x === x && tile.y === y)
+  if (isChecked) {
+    if (isChecked.sign) {
+      sign = 'X'
+    } else {
+      sign = 'O'
+    }
   }
 
   return (
-    <div onClick={tileOnClick} key = {10*x + y} className='Tile'></div>
+    <div onClick={onClick} key = {10*x + y} className='Tile' x = {x} y = {y}>
+      {sign}
+    </div>
   )
 } 
 

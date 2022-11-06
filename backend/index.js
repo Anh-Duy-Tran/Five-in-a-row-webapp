@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
-const Board = require('./models/board');
+const Tiles = require('./models/tiles');
+const Logic = require('./logic/five-in-row')
 
 const app = express();
 
@@ -18,15 +19,19 @@ app.use(requestLogger)
 
 app.use(cors())
 
-// app.use(express.static('build'))
+app.use(express.static('build'))
 
 app.get('/api/board', (req, res) => {
-  Board
+  Tiles
     .find({})
-    .then(board => {
-      res.json(board)
+    .then(tiles => {
+      res.json(tiles)
     })
     .catch(console.log);
+})
+
+app.get('/server/board', (req, res) => {
+  res.status(200).json(Logic.board);
 })
 
 app.post('/api/board', (req, res) => {
@@ -36,13 +41,23 @@ app.post('/api/board', (req, res) => {
     return res.status(400).json({ error: 'content missing' })
   }
 
-  const newPerson = new Board({...person})
+  const newTile = new Tiles({...tile})
 
-  newPerson.save().then(saved => res.json(saved))
+  newTile.save().then(saved => {
+    const win = Logic.addToBoard(Logic.board, saved.x, saved.y, saved.sign)
+    res.json({saved, win : win})
+  })
+})
+
+app.delete('/api/board', (req, res) => {
+  Tiles
+    .deleteMany({})
+    .then(ret => res.json(ret))
+    .catch(console.log)
 })
 
 const unknownEndpoint = (req, res) => {
-  response.status(404).send({ error: 'unknown endpoint' })
+  res.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
