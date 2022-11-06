@@ -1,7 +1,9 @@
-let board = Array.from(Array(50), () => new Array(50))
-
 const resetBoard = (board) => {
-  board = Array.from(Array(50), () => new Array(50))
+  for (let i = 0; i < 50; i++) {
+    for (let j = 0; j < 50; j++) {
+      board[i][j] = null;
+    }
+  }
 }
 
 const addToBoard = (board, x_, y_, sign) => {
@@ -43,12 +45,10 @@ const checkWin = (board, x, y) => {
       }
     }
 
-    console.log(direction);
-    console.log(Math.abs(highX - loX));
     if (Math.max(Math.abs(highX - loX), Math.abs(highY - loY)) >= 4) {
       winningLine = {
-        point1 : [loX, loY],
-        point2 : [highX, highY]
+        point1 : [loX - 25, loY - 25],
+        point2 : [highX - 25, highY - 25]
       }
       break;
     }
@@ -57,4 +57,4 @@ const checkWin = (board, x, y) => {
   return winningLine;
 }
 
-module.exports = { board, resetBoard, addToBoard }
+module.exports = { resetBoard, addToBoard }

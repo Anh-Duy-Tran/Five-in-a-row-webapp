@@ -2,7 +2,17 @@ const express = require('express');
 const cors = require('cors');
 
 const Tiles = require('./models/tiles');
-const Logic = require('./logic/five-in-row')
+const Logic = require('./logic/five-in-row');
+
+let board = []
+
+for (let i = 0; i < 50; i++) {
+  let row = []
+  for (let j = 0; j < 50; j++) {
+    row.push(null);
+  }
+  board.push(row);
+}
 
 const app = express();
 
@@ -31,7 +41,7 @@ app.get('/api/board', (req, res) => {
 })
 
 app.get('/server/board', (req, res) => {
-  res.status(200).json(Logic.board);
+  res.status(200).json(board);
 })
 
 app.post('/api/board', (req, res) => {
@@ -44,7 +54,7 @@ app.post('/api/board', (req, res) => {
   const newTile = new Tiles({...tile})
 
   newTile.save().then(saved => {
-    const win = Logic.addToBoard(Logic.board, saved.x, saved.y, saved.sign)
+    const win = Logic.addToBoard(board, saved.x, saved.y, saved.sign)
     res.json({saved, win : win})
   })
 })
@@ -52,7 +62,10 @@ app.post('/api/board', (req, res) => {
 app.delete('/api/board', (req, res) => {
   Tiles
     .deleteMany({})
-    .then(ret => res.json(ret))
+    .then(ret => {
+      Logic.resetBoard(board);
+      res.json(ret);
+    })
     .catch(console.log)
 })
 
